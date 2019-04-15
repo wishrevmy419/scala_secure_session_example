@@ -8,9 +8,12 @@ import play.api.mvc._
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class LoginController @Inject()
-  (userAction: UserInfoAction, sessionGenerator: SessionGenerator, cc: ControllerComponents)
-  (implicit ec: ExecutionContext) extends AbstractController(cc) {
+class LoginController @Inject() (
+                                  userAction: UserInfoAction,
+                                  sessionGenerator: SessionGenerator,
+                                  cc: ControllerComponents
+                                )(implicit ec: ExecutionContext)
+  extends AbstractController(cc) {
 
   def login = userAction.async { implicit request: UserRequest[AnyContent] =>
     val successFunc = { userInfo: UserInfo =>
@@ -31,4 +34,5 @@ class LoginController @Inject()
 
     form.bindFromRequest().fold(errorFunc, successFunc)
   }
+
 }
